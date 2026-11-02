@@ -2,8 +2,7 @@
 
 ### Data-Driven Volunteer Coordination for Social Impact
 ## Build note
-Built with AI-assisted development (live-coded with AI tools).
-My role: team of 2, what I personally did
+Team project (Team HQ DOPAMINE, 3 members) for Solution Challenge 2026. Built with AI-assisted development.
 
 ---
 

@@ -3,6 +3,7 @@ import json
 import logging
 from typing import List, Dict, Any
 from fastapi import FastAPI
+from fastapi.responses import FileResponse  # CHANGED: needed to serve the web pages
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
@@ -26,10 +27,7 @@ if GEMINI_API_KEY:
     genai.configure(api_key=GEMINI_API_KEY)
 
 MODEL_FALLBACKS = (
-    "gemini-2.5-flash",
-    "gemini-3.8-flash",
-    "gemini-2.0-flash",
-    "gemini-1.5-flash",
+    "gemini-3.8-flash",  # CHANGED: the other three models are retired (404 in your logs)
 )
 
 
@@ -151,8 +149,20 @@ Return ONLY valid JSON matching this exact structure with no extra text or markd
 
 
 # ── Routes ────────────────────────────────────────────────────────────────────
-@app.get("/")
-def root():
+@app.get("/")  # CHANGED: the home page is now the web app
+@app.get("/index.html")
+def home():
+    return FileResponse("index.html")
+
+
+@app.get("/dashboard")  # CHANGED: new route for the dashboard page
+@app.get("/dashboard.html")
+def dashboard():
+    return FileResponse("dashboard.html")
+
+
+@app.get("/health")  # CHANGED: the old status message moved here
+def health():
     return {"status": "running", "project": "Volunteer Coordinator AI"}
 
 
@@ -166,11 +176,13 @@ def match_volunteers(request: TaskRequest):
     volunteers = load_volunteers()
     task = request.task_description.strip()
 
+    source = "gemini"  # CHANGED: now we can see who answered
     matches = gemini_match(task, volunteers)
     if not matches:
+        source = "rule-based"
         matches = rule_based_match(task, volunteers)
 
-    return {"matches": matches}
+    return {"matches": matches, "source": source}  # CHANGED
 
 
 if __name__ == "__main__":

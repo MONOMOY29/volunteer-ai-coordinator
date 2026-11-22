@@ -7,6 +7,8 @@ Matches volunteers to NGO tasks. Describe a task in plain text and get the top 3
 ## Build note
 Team project (Team HQ DOPAMINE: Monomoy Dikshit, Samir Kumar Shaw, Samiksha Singh) for Solution Challenge 2026 – Build with AI. My part: [fill in]. Built with AI-assisted development.
 
+My part: backend (FastAPI API, Gemini matching with rule-based fallback), Render deployment, README and security cleanup. Built with AI-assisted development.
+
 ## Screenshots
 ![Matching page](screenshots/match.png)
 

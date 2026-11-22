@@ -124,8 +124,9 @@ Return ONLY valid JSON matching this exact structure with no extra text or markd
     for model_id in get_model_candidates():
         try:
             model = genai.GenerativeModel(model_id)
-            res = model.generate_content(prompt)
+            res = model.generate_content(prompt,generation_config={"response_mime_type": "application/json"},)
             raw = res.text.strip()
+            logger.info("Gemini raw reply (first 300 chars): %s", raw[:300])
             raw = raw.replace("```json", "").replace("```", "").strip()
             data = json.loads(raw)
 

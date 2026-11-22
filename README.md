@@ -1,145 +1,41 @@
-# 🚀 Smart Resource Allocation
+# Volunteer AI Coordinator
 
-### Data-Driven Volunteer Coordination for Social Impact
+Matches volunteers to NGO tasks. Describe a task in plain text and get the top 3 volunteers, ranked, with a reason for each.
+
+**Live app:** https://volunteer-ai-coordinator.onrender.com (free hosting: the first load can take up to ~50 seconds)
+
 ## Build note
-Team project (Team HQ DOPAMINE, 3 members) for Solution Challenge 2026. Built with AI-assisted development.
+Team project (Team HQ DOPAMINE: Monomoy Dikshit, Samir Kumar Shaw, Samiksha Singh) for Solution Challenge 2026 – Build with AI. My part: [fill in]. Built with AI-assisted development.
 
----
+## Screenshots
+![Matching page](screenshots/match.png)
 
-## 📌 Overview
+## How it works
+1. The user describes a task on the web page.
+2. The FastAPI backend (`main.py`) sends the task and the volunteer list to Google Gemini, asking for the top 3 as JSON.
+3. If Gemini is unavailable or rate-limited, a rule-based fallback scores volunteers instead (+3 per matching skill, +2 location, +2 availability, plus a small bonus for experience).
+4. The page shows the 3 matches. The API response includes a `source` field (`gemini` or `rule-based`) so you can see which one answered.
 
-**Smart Resource Allocation** is an AI-powered system designed to optimize the assignment of volunteers to tasks in social impact scenarios such as NGOs, disaster response, and community events.
+## Tech stack
+- Backend: Python, FastAPI, Uvicorn
+- AI: Google Gemini API
+- Data: `volunteers.json` (sample volunteer list)
+- Frontend: HTML, CSS, JavaScript (`index.html`, `dashboard.html`), served by the backend
+- Hosting: Render
 
-The platform intelligently matches volunteers with tasks based on:
-
-* Skills
-* Availability
-* Location
-* Task urgency
-
-This reduces manual coordination effort and significantly improves operational efficiency.
-
----
-
-## 🎯 Problem Statement
-
-Volunteer coordination in NGOs and social initiatives is often:
-
-* Manual and time-consuming
-* Inefficient due to poor skill matching
-* Difficult to scale during high-demand situations
-
-As a result, resources are underutilized and response times increase.
-
----
-
-## 💡 Solution
-
-This project introduces a **data-driven matching system** that uses AI to recommend the most suitable volunteers for each task.
-
-### Key Idea:
-
-> Automate volunteer-task allocation using intelligent ranking instead of manual assignment.
-
----
-
-## ⚙️ Features
-
-* 👤 Volunteer Registration (skills, availability, location)
-* 📋 Task Creation (requirements, urgency)
-* 🤖 AI-based Volunteer Matching
-* 📊 Ranked Recommendation Output
-* 🌐 Simple and interactive web interface
-
----
-
-## 🧠 AI Integration
-
-The system uses **Google Gemini AI** to:
-
-* Analyze volunteer profiles and task requirements
-* Generate ranked recommendations
-* Provide reasoning for each match
-
-This ensures context-aware and scalable decision-making.
-
----
-
-## 🏗️ System Architecture
-
+## Run locally
+```bash
+pip install -r requirements.txt
 ```
-User Interface (Frontend)
-        ↓
-Backend Server (API Layer)
-        ↓
-Google Gemini AI (Matching Logic)
-        ↓
-Database / Data Storage
+Create a `.env` file with `GEMINI_API_KEY=your_key_here`, then:
+```bash
+python main.py
 ```
+Open http://127.0.0.1:8000. Without a key, only the rule-based fallback runs.
 
----
-
-## 🛠️ Tech Stack
-
-* **Frontend:** HTML, CSS, JavaScript / React
-* **Backend:** Node.js / Flask
-* **AI Integration:** Google Gemini API
-* **Database:** Firebase / JSON-based storage
-* **Deployment:** Firebase Hosting / Render
-
----
-
-## 🚀 How It Works
-
-1. User registers volunteers with their details
-2. Tasks are created with required skills and urgency
-3. System sends data to AI model
-4. AI returns ranked volunteer recommendations
-5. Results are displayed on the dashboard
-
----
-
-## 📸 MVP (Minimum Viable Product)
-
-The MVP demonstrates:
-
-* Volunteer input system
-* Task creation
-* AI-powered matching output
-
-## 🔐 Security & Privacy
-
-* Basic input validation implemented
-* User data handled securely
-* Designed with privacy-first principles
-
----
-
-## 📈 Scalability
-
-The system is designed to:
-
-* Handle large volunteer datasets
-* Integrate with cloud infrastructure
-* Support real-time coordination during large-scale events
-
----
-
-## 🔮 Future Enhancements
-
-* Real-time location tracking
-* Mobile app integration
-* Advanced ML-based matching models
-* Multi-NGO collaboration platform
-
----
-
-## 👥 Team
-
-* Team Name: *HQ DOPAMINE*
-* Members: *(Monomoy Dikshit , Samir Kumar Shaw , Samiksha Singh)*
-
-
-## ⚠️ Note
-
-This project is developed as part of **Solution Challenge 2026 – Build with AI**, focusing on real-world impact using scalable AI solutions.
+## Known limitations
+- Volunteers come from a fixed sample file; there is no registration or database
+- Tasks are free text; urgency is not modelled
+- Gemini's free tier allows few requests per minute, so the fallback often answers when traffic is high
+- Uses the older `google-generativeai` SDK, which Google has deprecated; migration to `google-genai` is planned
+- No automated tests yet

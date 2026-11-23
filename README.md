@@ -9,8 +9,6 @@ Team project (Team HQ DOPAMINE: Monomoy Dikshit, Samir Kumar Shaw, Samiksha Sing
 
 My part: backend (FastAPI API, Gemini matching with rule-based fallback), Render deployment, README and security cleanup. Built with AI-assisted development.
 
-## Screenshots
-![Matching page](screenshots/match.png)
 
 ## How it works
 1. The user describes a task on the web page.
